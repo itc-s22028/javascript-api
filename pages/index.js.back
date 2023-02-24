@@ -1,0 +1,29 @@
+import axios from 'axios'
+
+const API_KEY = process.env.API_KEY
+const API_ENDPOINT = 'https://api.openweathermap.org/data/2.5/weather'
+const CITY_NAME = 'Tokyo'
+
+const fetchData = async () => {
+  const response = await axios.get(`${API_ENDPOINT}?q=${CITY_NAME}&appid=${API_KEY}&units=metric}`)
+  const data = response.data
+  return data
+}
+
+export default function Home ({ weather }) {
+  return (
+    <div>
+      <h1>Current weather in {CITY_NAME}</h1>
+      <p>Temperature: {weather.main.temp}°C</p>
+      <p>Feels like: {weather.main.feels_like}°C</p>
+      <p>Description: {weather.weather[0].description}</p>
+    </div>
+  )
+}
+
+export async function getStaticProps () {
+  const weather = await fetchData()
+  return {
+    props: { weather }
+  }
+}
